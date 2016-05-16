@@ -1,13 +1,16 @@
-package webapp
+package main
 
 import (
+	"fmt"
 	"net/http"
+
+	"github.com/ccutch/webapp/providers"
 )
 
-// Server type, fulfilled from `http` package.
-// Server should accept network requests, provide requests to providers, and return responses from
-// providers to requesting clients.
-type Server interface {
-  Handle(string, http.Handler)
-  ListenAndServe(string, http.Handler)
+func main() {
+	http.Handle("/users", new(providers.UserProvider).Mount())
+	fmt.Println("Server online 127.0.0.1:5000")
+	if err := http.ListenAndServe(":5000", nil); err != nil {
+		panic(err)
+	}
 }
